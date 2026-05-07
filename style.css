@@ -306,10 +306,6 @@ main {
     margin-bottom: 0.5rem;
 }
 
-.timeline-content h4.double-major {
-    color: var(--text-secondary);
-    font-size: 1rem;
-}
 
 .timeline-location {
     font-size: 0.9rem;
