@@ -46,7 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const revealOptions = {
         root: null,
-        threshold: 0.15, // Trigger when 15% of the element is visible
+        threshold: 0.02, // Lower threshold so tall sections trigger on mobile
+        rootMargin: "0px 0px -50px 0px" // Trigger slightly before the bottom
     };
 
     const revealObserver = new IntersectionObserver(revealCallback, revealOptions);
