@@ -48,7 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         navLinks.forEach(link => {
-            link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+            const href = link.getAttribute('href');
+            // Cross-page links (e.g. other.html) carry their own active state
+            // from the markup; scroll position says nothing about them.
+            if (!href.startsWith('#')) return;
+            link.classList.toggle('active', href === '#' + current);
         });
     };
 

@@ -54,8 +54,9 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#education">Education</a></li>
                 <li><a href="#experience">Experience</a></li>
-                <li><a href="#projects">Projects</a></li>
+                <li><a href="#research">Research</a></li>
                 <li><a href="#skills">Skills</a></li>
+                <li><a href="other.html">Other</a></li>
             </ul>
         </div>
     </nav>
@@ -154,9 +155,13 @@
         </section>
 
         <!-- Projects Section -->
-        <section id="projects" class="section">
-            <h2 class="section-title">Projects</h2>
-            <div class="projects-grid">
+        <!-- Research Section -->
+        <section id="research" class="section">
+            <h2 class="section-title">Research</h2>
+
+            <div class="research-group">
+                <h3 class="group-title">Protein &amp; Molecular Design</h3>
+                <div class="projects-grid">
 
                 <div class="project-card">
                     <div class="project-header">
@@ -174,6 +179,50 @@
                         <a href="https://github.com/gasredX09/TuneDiMA" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
                     </p>
                 </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>CAFA 6: Protein Function Prediction from Sequence</h3>
+                        <span class="project-date">May 2026</span>
+                    </div>
+                    <p class="project-summary">Predicting Gene Ontology annotations directly from amino-acid sequence for the Kaggle CAFA 6 challenge. Two signals are combined: ESM-2 650M embeddings feeding a separate MLP head per GO subontology, and a DIAMOND <code>blastp</code> k-NN baseline that propagates labels from a query's nearest neighbours weighted by bitscore. The ensemble weight is swept on held-out data, and scores are max-propagated up the GO DAG so no parent term scores below its descendants. Built as a reproducible Slurm pipeline on PSC Bridges-2.</p>
+                    <p class="project-links">
+                        <a href="https://github.com/gasredX09/cafa6-protein-function-prediction" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
+                    </p>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Structural Validation of Generated Protein Backbones</h3>
+                        <span class="project-date">Apr 2026 – May 2026</span>
+                    </div>
+                    <p class="project-summary">Generative models produce protein backbones readily; whether those backbones are geometrically sound is a separate question. This is a CCTBX-based validation pipeline scoring 100 generated structures, 50 from La-Proteina and 50 from ReQFlow, on Ramachandran favourability and MolProbity clashscore, and reporting per-structure metrics alongside a summary of how the two generators compare. Packaged with conda environments for both HPC and macOS so the analysis reruns cleanly.</p>
+                    <p class="project-links">
+                        <a href="https://github.com/gasredX09/protein-backbone-structural-validation" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
+                    </p>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Genome2Clusters: Unsupervised Annotation of Predicted Proteins</h3>
+                        <span class="project-date">Sept 2025 – Oct 2025</span>
+                    </div>
+                    <ul class="project-details">
+                        <li>Developed a comprehensive Python workflow to analyze the Mycoplasma genitalium genome, identifying open reading frames (ORFs) and translating 6,129 predicted proteins.</li>
+                        <li>Calculated physicochemical descriptors, such as molecular mass, isoelectric point, and hydropathy, utilizing Biopython. Implemented principal component analysis (PCA) combined with K-Means clustering (k = 5, silhouette = 0.078) to categorize proteins based on their biochemical profiles.</li>
+                        <li>Validated the resulting cluster assignments using NCBI BLAST, successfully identifying known DNA polymerases, primases, and membrane proteins, thus confirming a functional signal in the composition-based features.</li>
+                    </ul>
+                    <p class="project-links">
+                        <a href="https://github.com/gasredX09/Genome2Clusters" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
+                    </p>
+                </div>
+
+                </div>
+            </div>
+
+            <div class="research-group">
+                <h3 class="group-title">Biomedical Machine Learning</h3>
+                <div class="projects-grid">
 
                 <div class="project-card">
                     <div class="project-header">
@@ -196,7 +245,7 @@
                 <div class="project-card">
                     <div class="project-header">
                         <h3>Oncolearn (CMU X Nvidia Federated Learning Hackathon)</h3>
-                        <span class="project-date">Jan 2026 – Jan 2026</span>
+                        <span class="project-date">Jan 2026</span>
                     </div>
                     <ul class="project-details">
                         <li>Built an end-to-end deep learning pipeline for cancer subtyping from histopathology images using the OncoLearn framework, focusing on robust representation learning and modular experimentation.</li>
@@ -222,21 +271,6 @@
                         <li>Applied Grad-CAM interpretability to visualize model attention on pathological features such as nuclear atypia and glandular crowding, validating biological plausibility.</li>
                         <li>Deployed the trained model as a Gradio-based virtual pathology assistant, enabling real-time prediction and explainable decision support for digital pathology workflows.</li>
                     </ul>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3>Genome2Clusters: Unsupervised Annotation of Predicted Proteins</h3>
-                        <span class="project-date">Sept 2025 – Oct 2025</span>
-                    </div>
-                    <ul class="project-details">
-                        <li>Developed a comprehensive Python workflow to analyze the Mycoplasma genitalium genome, identifying open reading frames (ORFs) and translating 6,129 predicted proteins.</li>
-                        <li>Calculated physicochemical descriptors, such as molecular mass, isoelectric point, and hydropathy, utilizing Biopython. Implemented principal component analysis (PCA) combined with K-Means clustering (k = 5, silhouette = 0.078) to categorize proteins based on their biochemical profiles.</li>
-                        <li>Validated the resulting cluster assignments using NCBI BLAST, successfully identifying known DNA polymerases, primases, and membrane proteins, thus confirming a functional signal in the composition-based features.</li>
-                    </ul>
-                    <p class="project-links">
-                        <a href="https://github.com/gasredX09/Genome2Clusters" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
-                    </p>
                 </div>
 
                 <div class="project-card">
@@ -272,22 +306,6 @@
 
                 <div class="project-card">
                     <div class="project-header">
-                        <h3>Objective Bayesian Analysis of the On-Off Problem</h3>
-                        <span class="project-date">Jan 2024 – May 2024</span>
-                    </div>
-                    <ul class="project-details">
-                        <li>Led a team of 3 students in applying Bayesian inference with Poisson models to analyze sparse count data for the On–Off signal detection problem.</li>
-                        <li>Enhanced detection reliability by 20–30% on low-count datasets compared to classical frequentist methods, based on simulations of gamma-ray burst observations.</li>
-                        <li>Automated posterior computation and validation across 1000+ simulations, ensuring reproducible results and scalability to diverse data scenarios.</li>
-                        <li>Presented findings to faculty and peers, translating statistical concepts into actionable insights.</li>
-                    </ul>
-                    <p class="project-links">
-                        <a href="https://github.com/gasredX09/EP4130-Data-Science-Analysis" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
-                    </p>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-header">
                         <h3>Interaction of Graphene with DOPC Lipid Bilayer Membrane</h3>
                         <span class="project-date">Jan 2023 – Apr 2023</span>
                     </div>
@@ -301,7 +319,10 @@
                     </p>
                 </div>
 
+                </div>
             </div>
+
+            <p class="section-footnote">Work outside biology, including <a href="other.html">pLaTeX</a> and quantitative finance projects, lives on the <a href="other.html">Other</a> page.</p>
         </section>
 
         <!-- Skills Section -->
