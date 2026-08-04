@@ -511,27 +511,6 @@ main {
     font-weight: 500;
 }
 
-.project-details {
-    list-style: none;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    flex-grow: 1;
-}
-
-.project-details li {
-    margin-bottom: 0.6rem;
-    padding-left: 1.2rem;
-    position: relative;
-}
-
-.project-details li::before {
-    content: '·';
-    position: absolute;
-    left: 0;
-    font-weight: bold;
-    color: var(--accent-text);
-}
-
 .project-links {
     display: flex;
     flex-wrap: wrap;

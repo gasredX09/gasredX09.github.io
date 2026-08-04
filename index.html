@@ -156,6 +156,7 @@
 
         <!-- Projects Section -->
         <!-- Research Section -->
+        <!-- Research Section -->
         <section id="research" class="section">
             <h2 class="section-title">Research</h2>
 
@@ -168,13 +169,7 @@
                         <h3>Parameter-Efficient Fine-Tuning of DiMA for Controlled Protein Generation</h3>
                         <span class="project-date">Feb 2026 – Present</span>
                     </div>
-                    <ul class="project-details">
-                        <li>Fine-tuned DiMA, a latent diffusion model for protein sequence generation, to enable controlled generation of proteins conditioned on biological attributes such as protein family or functional labels.</li>
-                        <li>Implemented and compared parameter-efficient adaptation strategies, including selective layer unfreezing and lightweight fine-tuning of diffusion components to reduce training cost while preserving generation quality.</li>
-                        <li>Modified the conditioning mechanism within the diffusion denoiser to improve controllability in latent protein embedding space, and evaluated the effect of architectural changes on sequence diversity and target-specific generation.</li>
-                        <li>Designed an experimental pipeline on PSC Bridges-2 GPU infrastructure to benchmark fine-tuning efficiency, generation fidelity, and conditional consistency across multiple model variants.</li>
-                        <li>Conducted ablation studies comparing baseline DiMA against modified variants using training stability, reconstruction quality, diversity metrics, and condition adherence to identify effective design choices for controllable protein generation.</li>
-                    </ul>
+                    <p class="project-summary">DiMA generates protein sequences by diffusion in a learned latent space, but it generates them unconditionally. This work adapts it so generation can be steered by biological attributes such as protein family or functional label, and adapts it cheaply: selective layer unfreezing and lightweight fine-tuning of individual diffusion components rather than retraining the model. The conditioning mechanism inside the denoiser was reworked to give better control in latent embedding space. Ablations on PSC Bridges-2 compare variants on training stability, reconstruction quality, sequence diversity, and how faithfully samples actually obey the requested condition.</p>
                     <p class="project-links">
                         <a href="https://github.com/gasredX09/TuneDiMA" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
                     </p>
@@ -196,7 +191,7 @@
                         <h3>Structural Validation of Generated Protein Backbones</h3>
                         <span class="project-date">Apr 2026 – May 2026</span>
                     </div>
-                    <p class="project-summary">Generative models produce protein backbones readily; whether those backbones are geometrically sound is a separate question. This is a CCTBX-based validation pipeline scoring 100 generated structures, 50 from La-Proteina and 50 from ReQFlow, on Ramachandran favourability and MolProbity clashscore, and reporting per-structure metrics alongside a summary of how the two generators compare. Packaged with conda environments for both HPC and macOS so the analysis reruns cleanly.</p>
+                    <p class="project-summary">Generative models produce protein backbones readily; whether those backbones are geometrically sound is a separate question. This is a CCTBX-based validation pipeline scoring 100 generated structures, 50 from La-Proteina and 50 from ReQFlow, on Ramachandran favourability and MolProbity clashscore, reporting per-structure metrics alongside a summary of how the two generators compare. Packaged with conda environments for both HPC and macOS so the analysis reruns cleanly.</p>
                     <p class="project-links">
                         <a href="https://github.com/gasredX09/protein-backbone-structural-validation" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
                     </p>
@@ -207,11 +202,7 @@
                         <h3>Genome2Clusters: Unsupervised Annotation of Predicted Proteins</h3>
                         <span class="project-date">Sept 2025 – Oct 2025</span>
                     </div>
-                    <ul class="project-details">
-                        <li>Developed a comprehensive Python workflow to analyze the Mycoplasma genitalium genome, identifying open reading frames (ORFs) and translating 6,129 predicted proteins.</li>
-                        <li>Calculated physicochemical descriptors, such as molecular mass, isoelectric point, and hydropathy, utilizing Biopython. Implemented principal component analysis (PCA) combined with K-Means clustering (k = 5, silhouette = 0.078) to categorize proteins based on their biochemical profiles.</li>
-                        <li>Validated the resulting cluster assignments using NCBI BLAST, successfully identifying known DNA polymerases, primases, and membrane proteins, thus confirming a functional signal in the composition-based features.</li>
-                    </ul>
+                    <p class="project-summary">How much protein function is recoverable from composition alone, with no homology search? A Python workflow calls open reading frames across the <em>Mycoplasma genitalium</em> genome, translates 6,129 predicted proteins, and computes physicochemical descriptors (molecular mass, isoelectric point, hydropathy) with Biopython. PCA followed by K-Means (k = 5, silhouette 0.078) groups them by biochemical profile. Checking the clusters against NCBI BLAST recovers known DNA polymerases, primases, and membrane proteins, so there is real functional signal in composition-based features even at a modest silhouette.</p>
                     <p class="project-links">
                         <a href="https://github.com/gasredX09/Genome2Clusters" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
                     </p>
@@ -229,32 +220,9 @@
                         <h3>Enhancing Multimodal Parkinson’s Disease Classification and Explainability</h3>
                         <span class="project-date">Feb 2026 – Present</span>
                     </div>
-                    <ul class="project-details">
-                        <li>Developing a gait-based Parkinson’s disease classification pipeline within a multimodal team project focused on interpretable detection of neurological dysfunction from wearable sensor data.</li>
-                        <li>Preprocessed multichannel IMU signals from the WearGait-PD dataset (172 subjects) using sliding-window segmentation (2s, 100 Hz, 50% overlap), channel-wise normalization, and subject-level train/validation splits to avoid leakage.</li>
-                        <li>Built and benchmarked a Temporal Convolutional Network (TCN) to model gait and turning dynamics across multiple motor tasks, capturing long-range temporal dependencies in wearable time-series data.</li>
-                        <li>Implemented augmentation strategies, including jittering, scaling, time warping, and sensor dropout to improve robustness and generalization in limited-sample biomedical datasets.</li>
-                        <li>Evaluated models using repeated grouped cross-validation with accuracy, F1-score, and AUC, establishing a strong baseline for downstream multimodal fusion and explainable PD classification.</li>
-                        <li>Ran scalable experiments on PSC Bridges-2 GPU infrastructure to support reproducible training, ablation studies, and future integration with multimodal disease classification pipelines.</li>
-                    </ul>
+                    <p class="project-summary">The gait arm of a multimodal team project on interpretable detection of neurological dysfunction. Multichannel IMU signals from WearGait-PD (172 subjects) are segmented into 2-second windows at 100 Hz with 50% overlap, normalized per channel, and split at the subject level so no participant lands on both sides of a split. A Temporal Convolutional Network models gait and turning dynamics across motor tasks, trained with jittering, scaling, time warping, and sensor dropout to survive the small sample sizes typical of biomedical data. Evaluated by repeated grouped cross-validation on accuracy, F1, and AUC, as the baseline for later multimodal fusion.</p>
                     <p class="project-links">
                         <a href="https://github.com/gasredX09/Enhancing-Multimodal-Parkinsons-Disease-Classification-and-Explainability" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
-                    </p>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3>Oncolearn (CMU X Nvidia Federated Learning Hackathon)</h3>
-                        <span class="project-date">Jan 2026</span>
-                    </div>
-                    <ul class="project-details">
-                        <li>Built an end-to-end deep learning pipeline for cancer subtyping from histopathology images using the OncoLearn framework, focusing on robust representation learning and modular experimentation.</li>
-                        <li>Implemented data preprocessing, patch-based training, and model evaluation workflows to support scalable and reproducible cancer classification experiments.</li>
-                        <li>Trained and benchmarked CNN-based models for subtype discrimination, incorporating class imbalance handling and performance metrics suited for clinical decision support.</li>
-                        <li>Emphasized interpretability and extensibility by structuring the codebase for easy integration of new datasets, models, and explainability methods.</li>
-                    </ul>
-                    <p class="project-links">
-                        <a href="https://github.com/gasredX09/OncoLearn" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
                     </p>
                 </div>
 
@@ -263,14 +231,18 @@
                         <h3>Lightweight Deep Learning System for Cervical AIS Detection</h3>
                         <span class="project-date">Oct 2025 – Nov 2025</span>
                     </div>
-                    <ul class="project-details">
-                        <li>Developed an interpretable deep learning pipeline to classify cervical histopathology images as Normal vs Adenocarcinoma In Situ (AIS) using the CAISHI H&E dataset (2240 expert-labeled images).</li>
-                        <li>Implemented Macenko stain normalization and gland-focused patch extraction (320×320) to reduce staining variability and isolate diagnostically relevant morphology.</li>
-                        <li>Trained a transfer learning model using EfficientNet-B3 with class-balanced sampling and focal loss, achieving ~73% accuracy and F1-scores of 0.75 (AIS) and 0.71 (Normal).</li>
-                        <li>Reduced clinically critical false negatives for AIS by prioritizing recall, and analyzed precision–recall tradeoffs through threshold tuning for screening-oriented deployment.</li>
-                        <li>Applied Grad-CAM interpretability to visualize model attention on pathological features such as nuclear atypia and glandular crowding, validating biological plausibility.</li>
-                        <li>Deployed the trained model as a Gradio-based virtual pathology assistant, enabling real-time prediction and explainable decision support for digital pathology workflows.</li>
-                    </ul>
+                    <p class="project-summary">Classifying cervical histopathology as normal or adenocarcinoma in situ on the CAISHI H&amp;E dataset (2,240 expert-labeled images). Macenko stain normalization and gland-focused 320×320 patch extraction cut staining variability and isolate the diagnostically relevant morphology. An EfficientNet-B3 transfer model with class-balanced sampling and focal loss reaches about 73% accuracy, with F1 of 0.75 on AIS and 0.71 on normal. Because a missed AIS costs far more than a false alarm in a screening setting, thresholds were tuned toward recall and the precision-recall tradeoff analyzed explicitly. Grad-CAM confirms the model attends to nuclear atypia and glandular crowding rather than staining artifacts. Deployed as a Gradio pathology assistant.</p>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Oncolearn (CMU X Nvidia Federated Learning Hackathon)</h3>
+                        <span class="project-date">Jan 2026</span>
+                    </div>
+                    <p class="project-summary">Built at the CMU and Nvidia federated learning hackathon: an end-to-end pipeline for cancer subtyping from histopathology images on the OncoLearn framework. It covers preprocessing, patch-based training, and evaluation, with CNN baselines benchmarked for subtype discrimination under class imbalance and scored on metrics suited to clinical decision support. Structured so new datasets, models, and explainability methods drop in without rework.</p>
+                    <p class="project-links">
+                        <a href="https://github.com/gasredX09/OncoLearn" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
+                    </p>
                 </div>
 
                 <div class="project-card">
@@ -278,11 +250,7 @@
                         <h3>Image Storage Onto Synthetic DNA</h3>
                         <span class="project-date">Oct 2024 – Nov 2024</span>
                     </div>
-                    <ul class="project-details">
-                        <li>Encoded a 1000×1000 pixel image into synthetic DNA sequences in FASTA format using Python, applying biological constraints such as GC balance and homopolymer avoidance.</li>
-                        <li>Achieved 70% reduction in storage size while reconstructing images with 95% fidelity (PSNR ≈ 43 dB), demonstrating robustness against sequencing noise.</li>
-                        <li>Collaborated with a peer to implement decoding workflows and ensured accurate digital data recovery, highlighting DNA’s potential as a high-density, long-term storage medium.</li>
-                    </ul>
+                    <p class="project-summary">Encoding a 1000×1000 image into synthetic DNA sequences in FASTA format, subject to the constraints real synthesis imposes: balanced GC content and no long homopolymer runs. The scheme cuts storage size by 70% while reconstruction holds at roughly 95% fidelity (PSNR about 43 dB), which survives simulated sequencing noise. Decoding was implemented jointly with a collaborator to confirm the round trip recovers the original data.</p>
                     <p class="project-links">
                         <a href="https://github.com/gasredX09/Image-Storage-Onto-Synthetic-DNA" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
                     </p>
@@ -293,12 +261,7 @@
                         <h3>Computational Drug Discovery using ChEMBL</h3>
                         <span class="project-date">Mar 2024 – Jun 2024</span>
                     </div>
-                    <ul class="project-details">
-                        <li>Curated and pre-processed bioactivity data for acetylcholinesterase inhibitors from the ChEMBL database to enable QSAR modeling.</li>
-                        <li>Engineered molecular descriptors (Lipinski’s rules, PADEL features) from SMILES structures, creating high-quality datasets for regression tasks.</li>
-                        <li>Applied machine learning models (sklearn, LazyPredict) to predict pIC50 values, identifying top-performing algorithms that improved inhibitory activity prediction accuracy by ~20% over baseline.</li>
-                        <li>Visualized structure–activity relationships via exploratory data analysis (box/scatter plots), differentiating active vs. inactive compounds for interpretability.</li>
-                    </ul>
+                    <p class="project-summary">A QSAR pipeline over acetylcholinesterase inhibitors, running from raw ChEMBL bioactivity records through to potency prediction. SMILES structures are turned into molecular descriptors (Lipinski parameters and PADEL features), then regressed against pIC50 using scikit-learn, with LazyPredict sweeping model families quickly. The best performers improve inhibitory activity prediction by roughly 20% over baseline, and exploratory analysis of structure-activity relationships separates active from inactive compounds.</p>
                     <p class="project-links">
                         <a href="https://github.com/gasredX09/QSAR-pIC50-Prediction" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
                     </p>
@@ -309,11 +272,7 @@
                         <h3>Interaction of Graphene with DOPC Lipid Bilayer Membrane</h3>
                         <span class="project-date">Jan 2023 – Apr 2023</span>
                     </div>
-                    <ul class="project-details">
-                        <li>Conducted simulations of graphene-lipid bilayer interactions utilizing NAMD and VMD, resulting in molecular dynamics trajectories to investigate structural and energetic effects.</li>
-                        <li>Analyzed interaction mechanisms, such as membrane disruption and insertion dynamics, using Python, which provided valuable insights for nanomedical applications.</li>
-                        <li>Demonstrated potential uses in drug delivery, biosensing, and the design of biocompatible implants, underscoring the significance of computational nanobiophysics in the field of biomedical engineering.</li>
-                    </ul>
+                    <p class="project-summary">Molecular dynamics simulations of graphene interacting with a DOPC lipid bilayer, run in NAMD and analyzed with VMD and Python. The trajectories show how the sheet perturbs the membrane, covering insertion dynamics and the structural and energetic cost of disruption. The motivation is nanomedical: the same behaviour decides whether graphene is useful for drug delivery and biosensing, or a hazard in a biocompatible implant.</p>
                     <p class="project-links">
                         <a href="https://github.com/gasredX09/BT2123-GrapheneLipid_Interactions" rel="noopener" target="_blank"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Code</a>
                     </p>
