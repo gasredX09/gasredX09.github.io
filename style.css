@@ -262,16 +262,21 @@ main {
     flex-wrap: wrap;
     justify-content: center;
     align-items: flex-end;
-    gap: 2.5rem 2rem;
+    gap: 2.5rem 1.5rem;
     list-style: none;
 }
 
 .affil {
-    flex: 0 1 152px;
+    flex: 0 1 140px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+}
+
+/* Slot carrying two marks needs the extra width */
+.affil-wide {
+    flex-basis: 200px;
 }
 
 .affil-name {
@@ -293,8 +298,8 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
-    height: 84px;
+    gap: 0.9rem;
+    height: 72px;
     margin-top: auto;
     opacity: 0.72;
     transition: opacity var(--transition-fast);
@@ -314,7 +319,7 @@ main {
 
 /* Two marks sharing one slot (Chiu Lab sits across UPMC Hillman and Pitt) */
 .affil-logo-pair img {
-    max-height: 68px;
+    max-height: 46px;
 }
 
 /* Project cards (Other page) */
