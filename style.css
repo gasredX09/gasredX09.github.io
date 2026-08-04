@@ -1,4 +1,4 @@
-/* 
+/*
   Premium Dark Theme Portfolio Styles
 */
 
@@ -7,21 +7,25 @@
     --bg-main: #0a0a0f;
     --bg-secondary: #13131a;
     --bg-card: #1c1c24;
-    
+
     --text-primary: #f0f0f5;
     --text-secondary: #a0a0b0;
-    --text-muted: #6b6b7b;
-    
-    --accent-primary: #6366f1; /* Indigo */
-    --accent-secondary: #8b5cf6; /* Violet */
+    --text-muted: #7e7e8f;
+
+    --accent-primary: #6366f1; /* Indigo - decorative use */
+    --accent-secondary: #8b5cf6; /* Violet - decorative use */
     --accent-glow: rgba(99, 102, 241, 0.2);
-    
+
+    /* Lightened accents for small text, to clear WCAG AA on the dark bg */
+    --accent-text: #8b8ef5;
+    --accent-text-alt: #a78bfa;
+
     --border-color: rgba(255, 255, 255, 0.08);
-    
+
     /* Typography */
     --font-heading: 'Outfit', sans-serif;
     --font-body: 'Inter', sans-serif;
-    
+
     /* Animation Speeds */
     --transition-fast: 0.2s ease;
     --transition-medium: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -53,13 +57,44 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-    color: var(--accent-primary);
+    color: var(--accent-text);
     text-decoration: none;
     transition: color var(--transition-fast);
 }
 
 a:hover {
-    color: var(--accent-secondary);
+    color: var(--accent-text-alt);
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Inline SVG icons */
+.icon {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+.skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -100px;
+    z-index: 1100;
+    padding: 0.6rem 1rem;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+    top: 1rem;
 }
 
 /* Navigation */
@@ -96,6 +131,7 @@ a:hover {
     font-size: 1.5rem;
     background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -131,6 +167,42 @@ a:hover {
     width: 100%;
 }
 
+/* Mobile menu button (hidden on desktop) */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-toggle-bar {
+    display: block;
+    width: 24px;
+    height: 2px;
+    margin: 0 auto;
+    border-radius: 2px;
+    background: var(--text-primary);
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
 /* Main Content & Sections */
 main {
     padding-top: 80px; /* offset for fixed navbar */
@@ -140,12 +212,17 @@ main {
     max-width: 1000px;
     margin: 0 auto;
     padding: 6rem 2rem;
+    scroll-margin-top: 90px; /* keep anchored headings clear of the fixed navbar */
+}
+
+/* Reveal-on-scroll is opt-in via JS, so the page is fully readable without it */
+.js .section {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity var(--transition-medium), transform var(--transition-medium);
 }
 
-.section.visible {
+.js .section.visible {
     opacity: 1;
     transform: translateY(0);
 }
@@ -187,6 +264,7 @@ main {
     margin-bottom: 1rem;
     background: linear-gradient(135deg, #fff, #a0a0b0);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -295,7 +373,7 @@ main {
 .timeline-date {
     font-family: var(--font-body);
     font-size: 0.9rem;
-    color: var(--accent-primary);
+    color: var(--accent-text);
     font-weight: 500;
 }
 
@@ -314,12 +392,6 @@ main {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-}
-
-.timeline-location::before {
-    content: '\f3c5'; /* Map marker icon */
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
 }
 
 .timeline-details {
@@ -344,7 +416,7 @@ main {
     content: '▹';
     position: absolute;
     left: 0;
-    color: var(--accent-primary);
+    color: var(--accent-text);
 }
 
 /* Projects Grid */
@@ -382,7 +454,7 @@ main {
 
 .project-date {
     font-size: 0.85rem;
-    color: var(--accent-secondary);
+    color: var(--accent-text-alt);
     font-weight: 500;
 }
 
@@ -404,7 +476,24 @@ main {
     position: absolute;
     left: 0;
     font-weight: bold;
-    color: var(--accent-primary);
+    color: var(--accent-text);
+}
+
+.project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.project-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 /* Skills */
@@ -449,7 +538,7 @@ main {
 
 .tag:hover {
     background: rgba(99, 102, 241, 0.1);
-    color: var(--accent-primary);
+    color: var(--accent-text);
     border-color: var(--accent-primary);
 }
 
@@ -469,12 +558,13 @@ main {
 }
 
 .footer-social a {
+    display: inline-flex;
     color: var(--text-secondary);
     font-size: 1.5rem;
 }
 
 .footer-social a:hover {
-    color: var(--accent-primary);
+    color: var(--accent-text);
 }
 
 .footer p {
@@ -484,20 +574,72 @@ main {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .nav-links {
-        display: none; /* In a full build, add a hamburger menu */
+    .nav-toggle {
+        display: flex;
     }
-    
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        padding: 0.5rem 0;
+        /* Solid, not translucent: nested backdrop-filter inside the navbar's
+           own does not composite reliably, and the panel must stay legible. */
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .nav-links li {
+        list-style: none;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 0.9rem 2rem;
+        font-size: 1rem;
+    }
+
+    .nav-links a::after {
+        display: none;
+    }
+
     .section {
         padding: 4rem 1.5rem;
     }
-    
+
     .timeline-content h3 {
         flex-direction: column;
         gap: 0.3rem;
     }
-    
+
     .projects-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* Respect users who ask for less motion */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .js .section {
+        opacity: 1;
+        transform: none;
     }
 }
