@@ -25,7 +25,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
@@ -35,8 +34,6 @@
             <symbol id="i-github" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></symbol>
             <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286ZM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065Zm1.782 13.019H3.555V9h3.564v11.452ZM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003Z"/></symbol>
             <symbol id="i-x" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></symbol>
-            <symbol id="i-pin" viewBox="0 0 24 24"><path d="M11.54 22.351a.76.76 0 0 0 .921 0 19.58 19.58 0 0 0 2.682-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.97 2.282ZM12 13.5a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z"/></symbol>
-            <symbol id="i-code" viewBox="0 0 24 24"><path d="M14.447 3.027a.75.75 0 0 1 .527.92l-4.5 16.5a.75.75 0 0 1-1.448-.394l4.5-16.5a.75.75 0 0 1 .921-.526ZM16.72 6.22a.75.75 0 0 1 1.06 0l5.25 5.25a.75.75 0 0 1 0 1.06l-5.25 5.25a.75.75 0 1 1-1.06-1.06L21.44 12l-4.72-4.72a.75.75 0 0 1 0-1.06Zm-9.44 0a.75.75 0 0 1 0 1.06L2.56 12l4.72 4.72a.75.75 0 0 1-1.06 1.06L.97 12.53a.75.75 0 0 1 0-1.06l5.25-5.25a.75.75 0 0 1 1.06 0Z"/></symbol>
         </defs>
     </svg>
 
@@ -53,7 +50,6 @@
             <ul class="nav-links" id="nav-links">
                 <li><a href="#about">About</a></li>
                 <li><a href="#affiliations">Affiliations</a></li>
-                <li><a href="#experience">Experience</a></li>
                 <li><a href="#skills">Skills</a></li>
             </ul>
         </div>
@@ -127,58 +123,6 @@
             </ul>
         </section>
 
-        <!-- Experience Section -->
-        <section id="experience" class="section">
-            <h2 class="section-title">Experience</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <h3>Graduate Researcher <span class="timeline-date">Jan 2026 – Present</span></h3>
-                        <h4><a href="https://www.chiu-lab.org/" rel="noopener" target="_blank">Chiu Lab</a>, <a href="https://hillman.upmc.com/" rel="noopener" target="_blank">UPMC Hillman Cancer Center</a></h4>
-                        <p class="timeline-location"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg>Pittsburgh, Pennsylvania</p>
-                        <ul class="experience-list">
-                            <li>Conducted literature review on deep learning methods for Cell Painting analysis, including ChaMAE-ViT, Masked Autoencoders, and Cell Painting CNNs, to inform model selection, benchmarking, and interpretation strategies.</li>
-                            <li>Reimplemented CLOOME, a multimodal contrastive learning model for drug–target interaction prediction, integrating Cell Painting morphology, drug SMILES, and protein sequence features into a shared embedding space.</li>
-                            <li>Reproduced core experimental results and developed a benchmarking pipeline to compare CLOOME against baseline models for multimodal biological representation learning.</li>
-                            <li>Built end-to-end PyTorch workflows for preprocessing, training, validation, and comparative evaluation on large-scale drug and gene perturbation datasets.</li>
-                            <li>Leveraged ACCESS Bridges2 HPC resources to scale deep learning experiments for multimodal biomedical modeling and interpretable drug–gene interaction analysis.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <h3>Project Intern <span class="timeline-date">May 2025 – Jul 2025</span></h3>
-                        <h4>Algoleap Technologies Pvt. Ltd.</h4>
-                        <p class="timeline-location"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg>Hyderabad, India</p>
-                        <ul class="experience-list">
-                            <li>Built an AI-powered marketing workflow using webhooks, n8n, OpenAI, and Salesforce APIs to automate campaign outreach.</li>
-                            <li>Developed campaign automation features, including ad copy, image, and email generation; coded frontend with Vercel v0 and backend with Next.js, Node.js, Prisma, and PostgreSQL.</li>
-                            <li>Resolved production issues in backend APIs and optimized image generation integration with Vertex AI.</li>
-                            <li>Collaborated with cross-functional teams to align marketing automation outputs with client requirements, improving adoption.</li>
-                            <li>Increased lead-to-customer conversion rate by 5% through efficient automation and integration reliability.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <h3>Bioinformatics Intern <span class="timeline-date">Jan 2024 – May 2024</span></h3>
-                        <h4>Strand Life Sciences Pvt. Ltd.</h4>
-                        <p class="timeline-location"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg>Bangalore, India</p>
-                        <ul class="experience-list">
-                            <li>Developed Python pipelines integrating the NIST Mass Spectral Library and the Dynamic Link Library interface to analyze and validate MS/MS spectra for biological compound identification.</li>
-                            <li>Designed and created scripts to compare outputs from NIST-UI and DLL across 18 parameter settings, ensuring exact concordance in identity and similarity searches.</li>
-                            <li>Collaborated with senior researchers and co-interns to enhance data retrieval and processing efficiency by 25%, improving the speed and reliability of downstream proteomics workflows.</li>
-                            <li>Documented workflows and delivered tutorials to the NIST team, enabling seamless adoption into production pipelines.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects Section -->
         <!-- Skills Section -->
         <section id="skills" class="section">
             <h2 class="section-title">Skills</h2>
