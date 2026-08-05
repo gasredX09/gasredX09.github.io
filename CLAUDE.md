@@ -31,6 +31,8 @@ there applies.
   sample for the personality pass.
 - Three strong repos are on neither the site nor the CV: `pLaTeX`,
   `cafa6-protein-function-prediction`, `protein-backbone-structural-validation`.
+- Nor is his contribution to `ramithuh/explainer` (three commits, diagram
+  rendering). Details in `~/phd/ARYAN-PROFILE.md`.
 - A protein backbone animation is planned for the hero, built from the real PDB
   files in `protein-backbone-structural-validation` rather than stock artwork.
   Keep it to a few KB of CA coordinates on a canvas; do not pull in Mol* or
