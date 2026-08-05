@@ -16,12 +16,33 @@
     --accent-text-alt: #a78bfa;
 
     --border-color: rgba(255, 255, 255, 0.08);
+    --code-bg: rgba(255, 255, 255, 0.06);
+    --logo-opacity: 0.72;
 
     /* GitHub's own stack, so the page renders in the reader's system UI font */
     --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica,
         Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 
     --transition-fast: 0.15s ease;
+}
+
+/* Light theme. Dark is the default; this applies only when the reader opts in,
+   so no prefers-color-scheme rule here on purpose. */
+:root[data-theme="light"] {
+    --bg-main: #ffffff;
+    --bg-secondary: #f6f8fa;
+    --bg-card: #f6f8fa;
+
+    --text-primary: #1f2328;
+    --text-secondary: #424a53;
+    --text-muted: #59636e;
+
+    --accent-text: #4f46e5;
+    --accent-text-alt: #6d28d9;
+
+    --border-color: #d1d9e0;
+    --code-bg: rgba(27, 31, 36, 0.06);
+    --logo-opacity: 0.85;
 }
 
 * {
@@ -123,6 +144,7 @@ a:hover {
     display: flex;
     gap: 1.75rem;
     list-style: none;
+    margin-left: auto;   /* keep links right-aligned now the toggle follows them */
 }
 
 .nav-links a {
@@ -140,6 +162,31 @@ a:hover {
     border-bottom: 1px solid var(--text-muted);
     padding-bottom: 2px;
 }
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    margin-left: 1.25rem;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.theme-toggle:hover {
+    color: var(--text-primary);
+}
+
+/* one icon per theme */
+.theme-toggle .icon-moon { display: none; }
+:root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+:root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
 
 /* Mobile menu button (hidden on desktop) */
 .nav-toggle {
@@ -317,7 +364,7 @@ main {
        max-width on the image would have nothing to resolve against */
     max-width: 168px;
     margin-top: auto;
-    opacity: 0.72;
+    opacity: var(--logo-opacity);
     transition: opacity var(--transition-fast);
 }
 
@@ -383,7 +430,7 @@ main {
     font-size: 0.85em;
     padding: 0.1em 0.35em;
     border-radius: 3px;
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--code-bg);
     color: var(--text-primary);
 }
 
@@ -463,6 +510,9 @@ main {
 @media (max-width: 768px) {
     .nav-toggle {
         display: flex;
+        /* nav-links is absolutely positioned here, so the hamburger needs to
+           claim the free space itself to sit beside the theme toggle */
+        margin-left: auto;
     }
 
     .nav-links {
