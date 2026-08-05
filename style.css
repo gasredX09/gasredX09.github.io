@@ -265,17 +265,16 @@ main {
     list-style: none;
 }
 
+/* Slots size to their own content so each name can hold one line. The
+   two-mark Chiu Lab slot widens on its own for the same reason. */
 .affil {
-    flex: 0 1 140px;
+    flex: 0 0 auto;
+    min-width: 110px;
+    max-width: 240px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-}
-
-/* Slot carrying two marks needs the extra width */
-.affil-wide {
-    flex-basis: 200px;
 }
 
 .affil-name {
@@ -283,6 +282,7 @@ main {
     font-size: 0.9375em;
     color: var(--text-primary);
     line-height: 1.35;
+    white-space: nowrap;
 }
 
 .affil-date {
@@ -297,7 +297,10 @@ main {
     align-items: center;
     justify-content: center;
     gap: 0.9rem;
-    height: 72px;
+    height: 64px;
+    /* capped explicitly: the slot is content-sized, so a percentage
+       max-width on the image would have nothing to resolve against */
+    max-width: 168px;
     margin-top: auto;
     opacity: 0.72;
     transition: opacity var(--transition-fast);
@@ -315,9 +318,13 @@ main {
     object-fit: contain;
 }
 
-/* Two marks sharing one slot (Chiu Lab sits across UPMC Hillman and Pitt) */
+/* Two marks sharing one slot (UPMC Hillman and Pitt) */
+.affil-logo-pair {
+    max-width: 200px;
+}
+
 .affil-logo-pair img {
-    max-height: 46px;
+    max-height: 44px;
 }
 
 /* Project cards (Other page) */
@@ -472,6 +479,10 @@ main {
 
     .nav-links a.active {
         border-bottom: none;
+    }
+
+    .affil-name {
+        white-space: normal;
     }
 
     .section {
