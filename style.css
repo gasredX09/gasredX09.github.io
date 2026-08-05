@@ -212,7 +212,22 @@ main {
 }
 
 .hero-content {
-    max-width: 720px;
+    display: flex;
+    align-items: flex-start;
+    gap: 3rem;
+}
+
+.hero-text {
+    flex: 1 1 auto;
+    max-width: 680px;
+}
+
+.hero-photo {
+    flex: 0 0 auto;
+    width: 200px;
+    height: 200px;
+    border-radius: 6px;
+    object-fit: cover;
 }
 
 .hero-title {
@@ -479,6 +494,16 @@ main {
 
     .nav-links a.active {
         border-bottom: none;
+    }
+
+    .hero-content {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .hero-photo {
+        width: 160px;
+        height: 160px;
     }
 
     .affil-name {
