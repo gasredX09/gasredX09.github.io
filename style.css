@@ -26,8 +26,27 @@
     --transition-fast: 0.15s ease;
 }
 
-/* Light theme. Dark is the default; this applies only when the reader opts in,
-   so no prefers-color-scheme rule here on purpose. */
+/* Light theme. The system preference decides by default; an explicit
+   data-theme set by the toggle overrides it in either direction. */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+    --bg-main: #ffffff;
+    --bg-secondary: #f6f8fa;
+    --bg-card: #f6f8fa;
+
+    --text-primary: #1f2328;
+    --text-secondary: #424a53;
+    --text-muted: #59636e;
+
+    --accent-text: #4f46e5;
+    --accent-text-alt: #6d28d9;
+
+    --border-color: #d1d9e0;
+    --code-bg: rgba(27, 31, 36, 0.06);
+    --logo-opacity: 0.85;
+    }
+}
+
 :root[data-theme="light"] {
     --bg-main: #ffffff;
     --bg-secondary: #f6f8fa;
@@ -44,6 +63,7 @@
     --code-bg: rgba(27, 31, 36, 0.06);
     --logo-opacity: 0.85;
 }
+
 
 * {
     margin: 0;
@@ -185,6 +205,12 @@ a:hover {
 
 /* one icon per theme */
 .theme-toggle .icon-moon { display: none; }
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .theme-toggle .icon-moon { display: block; }
+    :root:not([data-theme="dark"]) .theme-toggle .icon-sun { display: none; }
+}
+
 :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
 :root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
 
@@ -379,6 +405,18 @@ main {
     height: auto;
     object-fit: contain;
 }
+
+/* Per-theme logo variants. Done in CSS, not JS, so a reader with scripts off
+   and a light system preference still gets marks they can see. */
+.logo-light { display: none; }
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .logo-light { display: block; }
+    :root:not([data-theme="dark"]) .logo-dark { display: none; }
+}
+
+:root[data-theme="light"] .logo-light { display: block; }
+:root[data-theme="light"] .logo-dark { display: none; }
 
 /* Two marks sharing one slot (UPMC Hillman and Pitt) */
 .affil-logo-pair {

@@ -1,39 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 0. Theme. Dark is the default; the inline bootstrap in <head> has already
-    // applied any stored preference, so this only wires the toggle.
+    // 0. Theme. The system preference decides unless the reader has chosen;
+    // choosing pins data-theme, which CSS treats as an override in either
+    // direction. Palette and logo variants are handled entirely in CSS.
     const themeToggle = document.querySelector('.theme-toggle');
     const themeMeta = document.querySelector('meta[name="theme-color"]');
+    const systemLight = window.matchMedia('(prefers-color-scheme: light)');
 
-    const applyTheme = theme => {
-        const light = theme === 'light';
-        if (light) document.documentElement.setAttribute('data-theme', 'light');
+    const stored = () => localStorage.getItem('theme');
+    const effective = () => stored() || (systemLight.matches ? 'light' : 'dark');
+
+    const sync = () => {
+        const choice = stored();
+        if (choice) document.documentElement.setAttribute('data-theme', choice);
         else document.documentElement.removeAttribute('data-theme');
 
+        const light = effective() === 'light';
         themeToggle.setAttribute('aria-label',
             light ? 'Switch to dark theme' : 'Switch to light theme');
         if (themeMeta) themeMeta.setAttribute('content', light ? '#ffffff' : '#0a0a0f');
-
-        // Logos that would be invisible on the other background swap file.
-        // Only the active variant is ever fetched.
-        document.querySelectorAll('img[data-light]').forEach(img => {
-            if (!img.dataset.dark) {
-                img.dataset.dark = img.getAttribute('src');
-                img.dataset.darkW = img.getAttribute('width');
-                img.dataset.darkH = img.getAttribute('height');
-            }
-            img.setAttribute('src', light ? img.dataset.light : img.dataset.dark);
-            img.setAttribute('width', light ? img.dataset.lightW : img.dataset.darkW);
-            img.setAttribute('height', light ? img.dataset.lightH : img.dataset.darkH);
-        });
     };
 
-    applyTheme(localStorage.getItem('theme') === 'light' ? 'light' : 'dark');
-
     themeToggle.addEventListener('click', () => {
-        const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-        localStorage.setItem('theme', next);
-        applyTheme(next);
+        localStorage.setItem('theme', effective() === 'light' ? 'dark' : 'light');
+        sync();
     });
+
+    // follow the OS while the reader has expressed no preference of their own
+    systemLight.addEventListener('change', () => { if (!stored()) sync(); });
+
+    sync();
 
     const navToggle = document.querySelector('.nav-toggle');
     const navList = document.querySelector('.nav-links');

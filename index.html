@@ -22,7 +22,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%236366f1'/><text x='50' y='54' font-family='system-ui,sans-serif' font-size='46' font-weight='700' fill='%23fff' text-anchor='middle' dominant-baseline='middle'>AG</text></svg>">
 
     <link rel="stylesheet" href="style.css">
-    <script>(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');})();</script>
+    <script>(function(){var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
 <body>
 
@@ -91,15 +91,18 @@
                     <p class="affil-name">Carnegie Mellon University</p>
                     <p class="affil-date">MS, 2025 – Dec 2026</p>
                     <a class="affil-logo" href="https://www.cmu.edu/" rel="noopener" target="_blank">
-                        <img src="assets/logos/cmu.png" data-light="assets/logos/cmu-light.png" data-light-w="320" data-light-h="204" alt="" width="320" height="204" loading="lazy" decoding="async">
+                        <img class="logo-dark" src="assets/logos/cmu.png" width="320" height="204" alt="" loading="lazy" decoding="async">
+                        <img class="logo-light" src="assets/logos/cmu-light.png" width="320" height="204" alt="" loading="lazy" decoding="async">
                     </a>
                 </li>
                 <li class="affil">
                     <p class="affil-name">UPMC Hillman &amp; Pitt</p>
                     <p class="affil-date">Jan 2026 – May 2026</p>
                     <a class="affil-logo affil-logo-pair" href="https://www.chiu-lab.org/" rel="noopener" target="_blank">
-                        <img src="assets/logos/upmc.png" data-light="assets/logos/upmc-light.png" data-light-w="320" data-light-h="111" alt="" width="320" height="110" loading="lazy" decoding="async">
-                        <img src="assets/logos/pitt.png" data-light="assets/logos/pitt-light.png" data-light-w="254" data-light-h="320" alt="" width="111" height="139" loading="lazy" decoding="async">
+                        <img class="logo-dark" src="assets/logos/upmc.png" width="320" height="110" alt="" loading="lazy" decoding="async">
+                        <img class="logo-light" src="assets/logos/upmc-light.png" width="320" height="111" alt="" loading="lazy" decoding="async">
+                        <img class="logo-dark" src="assets/logos/pitt.png" width="111" height="139" alt="" loading="lazy" decoding="async">
+                        <img class="logo-light" src="assets/logos/pitt-light.png" width="254" height="320" alt="" loading="lazy" decoding="async">
                     </a>
                 </li>
                 <li class="affil">
@@ -120,7 +123,8 @@
                     <p class="affil-name">Strand Life Sciences</p>
                     <p class="affil-date">Jan 2024 – May 2024</p>
                     <a class="affil-logo" href="https://strandls.com/" rel="noopener" target="_blank">
-                        <img src="assets/logos/strand.png" data-light="assets/logos/strand-light.png" data-light-w="320" data-light-h="59" alt="" width="320" height="61" loading="lazy" decoding="async">
+                        <img class="logo-dark" src="assets/logos/strand.png" width="320" height="61" alt="" loading="lazy" decoding="async">
+                        <img class="logo-light" src="assets/logos/strand-light.png" width="320" height="59" alt="" loading="lazy" decoding="async">
                     </a>
                 </li>
 
