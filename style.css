@@ -427,6 +427,64 @@ main {
     max-height: 44px;
 }
 
+/* Publications */
+.pub-list {
+    list-style: none;
+    max-width: 760px;
+}
+
+.pub-item {
+    padding-bottom: 1.5rem;
+}
+
+.pub-item:last-child {
+    padding-bottom: 0;
+}
+
+.pub-title {
+    font-size: 1em;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 0.3rem;
+}
+
+.pub-authors {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.pub-authors strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.pub-count {
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.pub-count::before {
+    content: "\00b7\00a0";
+}
+
+.pub-venue {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+}
+
+.pub-note {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-top: 0.6rem;
+}
+
+.pub-item .project-links {
+    margin-top: 0.9rem;
+    padding-top: 0;
+    border-top: none;
+}
+
 /* News */
 .news-list {
     list-style: none;
