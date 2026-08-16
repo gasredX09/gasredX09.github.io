@@ -485,23 +485,6 @@ main {
     border-top: none;
 }
 
-.pub-contrib {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    margin-top: 0.6rem;
-    padding-left: 0.85rem;
-    border-left: 2px solid var(--border-color);
-}
-
-.pub-contrib-label {
-    color: var(--text-primary);
-    font-weight: 600;
-}
-
-.pub-contrib-label::after {
-    content: ":";
-}
-
 /* News */
 .news-list {
     list-style: none;
