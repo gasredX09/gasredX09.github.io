@@ -115,6 +115,16 @@ These cost real time to rediscover:
   preview copies inside the repo so relative paths resolve, then delete them.
 - Injected scripts that drive the page must register on `DOMContentLoaded`
   *after* `script.js`, or the handler is not attached yet.
+- **`--disable-javascript` is a no-op.** It silently does nothing and the page
+  still runs its scripts, so any "verified without JS" claim made with it is
+  worthless. `--blink-settings=scriptEnabled=false` is worse: it produces an
+  empty dump. To test the no-JS path, write a temp copy with `<script>` blocks
+  stripped out and render that.
+- **`requestAnimationFrame` never fires** here, and **`window.scrollTo` is a
+  no-op** (`scrollY` stays 0). Anything scroll-driven or rAF-throttled cannot
+  be exercised headlessly. Initial paint still works because the code also
+  calls its render/update path directly at init. Verify scroll behaviour in a
+  real browser; do not conclude from a headless screenshot that it is broken.
 
 ## CSS gotcha, already hit once
 

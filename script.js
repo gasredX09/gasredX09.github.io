@@ -89,8 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (ticking) return;
         ticking = true;
         requestAnimationFrame(() => {
-            update();
-            ticking = false;
+            try { update(); } finally { ticking = false; }
         });
     };
 

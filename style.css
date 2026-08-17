@@ -19,6 +19,10 @@
     --code-bg: rgba(255, 255, 255, 0.06);
     --logo-opacity: 0.72;
 
+    /* backbone trace, N terminus to C terminus */
+    --protein-n: #60a5fa;
+    --protein-c: #c084fc;
+
     /* GitHub's own stack, so the page renders in the reader's system UI font */
     --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica,
         Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
@@ -44,6 +48,9 @@
     --border-color: #d1d9e0;
     --code-bg: rgba(27, 31, 36, 0.06);
     --logo-opacity: 0.85;
+
+    --protein-n: #2563eb;
+    --protein-c: #7c3aed;
     }
 }
 
@@ -62,6 +69,9 @@
     --border-color: #d1d9e0;
     --code-bg: rgba(27, 31, 36, 0.06);
     --logo-opacity: 0.85;
+
+    --protein-n: #2563eb;
+    --protein-c: #7c3aed;
 }
 
 
@@ -341,6 +351,33 @@ main {
 
 .social-icon:hover {
     color: var(--text-primary);
+}
+
+/* Generated backbone figure */
+.structure-section {
+    padding-top: 0;
+    padding-bottom: 2rem;
+}
+
+.structure-canvas {
+    display: block;
+    width: 100%;
+    height: 260px;
+}
+
+.structure-caption {
+    max-width: 640px;
+    margin: 0.75rem auto 0;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+    .structure-canvas {
+        height: 380px;
+    }
 }
 
 /* Affiliation strip */
