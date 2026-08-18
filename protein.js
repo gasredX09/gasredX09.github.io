@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const models = chosen.map(i => BACKBONES[i]);
     const SHOWN = models.length;
     const spin = new Array(SHOWN).fill(0);      // per-structure drag offset
+    const vel = new Array(SHOWN).fill(0);       // rad/ms, decays after a flick
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     let w = 0, h = 0, cols = 3, cellW = 0, cellH = 0;
@@ -130,8 +131,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const refresh = () => { layout(); measure(); render(); };
 
-    // Drag one structure to spin it independently of the others.
-    let dragging = -1, lastX = 0;
+    // Drag one structure to spin it independently of the others. Release with
+    // some speed and it keeps turning, slowing under friction until it stops.
+    const MAX_V = 0.03;        // rad/ms cap, about five turns a second
+    const FRICTION = 0.9982;   // per ms; a hard flick coasts ~2.6 turns over ~3s
+    const STOP_V = 0.00008;    // below this it is not visibly moving
+
+    let dragging = -1, lastX = 0, lastT = 0;
     const cellAt = e => {
         const r = canvas.getBoundingClientRect();
         const i = Math.floor((e.clientY - r.top) / cellH) * cols
@@ -142,21 +148,58 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.addEventListener('pointerdown', e => {
         dragging = cellAt(e);
         if (dragging < 0) return;
+        vel[dragging] = 0;            // grabbing a spinning one stops it
         lastX = e.clientX;
+        lastT = e.timeStamp;
         canvas.setPointerCapture(e.pointerId);
     });
 
     canvas.addEventListener('pointermove', e => {
         if (dragging < 0) return;
-        spin[dragging] += (e.clientX - lastX) * 0.012;
+        const dx = (e.clientX - lastX) * 0.012;
+        const dt = Math.max(1, e.timeStamp - lastT);
+        spin[dragging] += dx;
+        // smooth so one jittery final event cannot dominate the throw
+        vel[dragging] = vel[dragging] * 0.7 + (dx / dt) * 0.3;
         lastX = e.clientX;
+        lastT = e.timeStamp;
         schedule();
     });
 
     const endDrag = e => {
         if (dragging < 0) return;
+        const i = dragging;
         dragging = -1;
         if (canvas.hasPointerCapture(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
+        vel[i] = Math.max(-MAX_V, Math.min(MAX_V, vel[i]));
+        if (reduce.matches) vel[i] = 0;
+        if (Math.abs(vel[i]) > STOP_V) coast();
+    };
+
+    // Runs only while something is still turning, then stops itself.
+    let coasting = false;
+    const coast = () => {
+        if (coasting) return;
+        coasting = true;
+        let prev = performance.now();
+        const step = now => {
+            const dt = Math.min(64, now - prev);   // ignore huge tab-switch gaps
+            prev = now;
+            let moving = false;
+            for (let i = 0; i < SHOWN; i++) {
+                // A held structure keeps whatever velocity the drag is building
+                // up, otherwise releasing it mid-coast would throw nothing.
+                if (i === dragging) continue;
+                if (Math.abs(vel[i]) <= STOP_V) { vel[i] = 0; continue; }
+                spin[i] += vel[i] * dt;
+                vel[i] *= Math.pow(FRICTION, dt);
+                moving = true;
+            }
+            render();
+            if (moving) requestAnimationFrame(step);
+            else coasting = false;
+        };
+        requestAnimationFrame(step);
     };
     canvas.addEventListener('pointerup', endDrag);
     canvas.addEventListener('pointercancel', endDrag);
