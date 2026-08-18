@@ -33,7 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const models = chosen.map(i => BACKBONES[i]);
     const SHOWN = models.length;
     const spin = new Array(SHOWN).fill(0);      // per-structure drag offset
-    const vel = new Array(SHOWN).fill(0);       // rad/ms, decays after a flick
+    const vel = new Array(SHOWN).fill(0);       // rad/ms about Y, decays after a flick
+    const tiltOff = new Array(SHOWN).fill(0);   // extra X rotation from hard scrolls
+    const velX = new Array(SHOWN).fill(0);      // rad/ms about X
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     let w = 0, h = 0, cols = 3, cellW = 0, cellH = 0;
@@ -78,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const cy = cellH * (Math.floor(i / cols) + 0.5);
             const angle = base + spin[i];
             const ca = Math.cos(angle), sa = Math.sin(angle);
-            const tilt = 0.42, ct = Math.cos(tilt), st = Math.sin(tilt);
+            const tilt = 0.42 + tiltOff[i], ct = Math.cos(tilt), st = Math.sin(tilt);
 
             const proj = pts.map(([x, y, z]) => {
                 const rx = x * ca + z * sa;
@@ -189,11 +191,18 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < SHOWN; i++) {
                 // A held structure keeps whatever velocity the drag is building
                 // up, otherwise releasing it mid-coast would throw nothing.
-                if (i === dragging) continue;
-                if (Math.abs(vel[i]) <= STOP_V) { vel[i] = 0; continue; }
-                spin[i] += vel[i] * dt;
-                vel[i] *= Math.pow(FRICTION, dt);
-                moving = true;
+                if (i !== dragging) {
+                    if (Math.abs(vel[i]) > STOP_V) {
+                        spin[i] += vel[i] * dt;
+                        vel[i] *= Math.pow(FRICTION, dt);
+                        moving = true;
+                    } else { vel[i] = 0; }
+                }
+                if (Math.abs(velX[i]) > STOP_V) {
+                    tiltOff[i] += velX[i] * dt;
+                    velX[i] *= Math.pow(FRICTION, dt);
+                    moving = true;
+                } else { velX[i] = 0; }
             }
             render();
             if (moving) requestAnimationFrame(step);
@@ -203,6 +212,25 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     canvas.addEventListener('pointerup', endDrag);
     canvas.addEventListener('pointercancel', endDrag);
+
+    // A hard scroll while the pointer is over a structure tumbles that one
+    // about X. Judged on speed rather than raw delta so a mouse wheel and a
+    // trackpad behave alike, and thresholded so ordinary scrolling past the
+    // figure leaves everything alone. Never calls preventDefault: the page
+    // must keep scrolling normally.
+    const HARD = 2.2;          // px/ms of wheel travel before it counts as hard
+    let wheelT = 0;
+    canvas.addEventListener('wheel', e => {
+        if (reduce.matches) return;
+        const i = cellAt(e);
+        if (i < 0) return;
+        const dt = Math.max(1, e.timeStamp - wheelT);
+        wheelT = e.timeStamp;
+        const speed = e.deltaY / dt;
+        if (Math.abs(speed) < HARD) return;
+        velX[i] = Math.max(-MAX_V, Math.min(MAX_V, velX[i] + speed * 0.0016));
+        coast();
+    }, { passive: true });
 
     refresh();
     window.addEventListener('load', refresh);
