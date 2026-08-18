@@ -160,23 +160,16 @@ a:hover {
     align-items: center;
 }
 
-/* The brand is the same helix that serves as the favicon, so the tab and the
-   page carry one mark. The name is already the page's h1 right below it. */
 .nav-brand {
-    display: inline-flex;
-    align-items: center;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
     color: var(--text-secondary);
     transition: color var(--transition-fast);
 }
 
 .nav-brand:hover {
     color: var(--text-primary);
-}
-
-.brand-mark {
-    width: 30px;
-    height: 30px;
-    display: block;
 }
 
 .nav-links {
