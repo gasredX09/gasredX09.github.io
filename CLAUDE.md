@@ -63,3 +63,47 @@ The better version of the same idea, which he liked:
 Anything from the vault itself only goes up after he has reviewed it, removed
 `needs_review`, and rewritten it in his own voice. Three real notes beat
 forty-seven imported ones.
+
+## Two parked visual ideas, and the rule they share
+
+Both came from wanting to reuse a figure he liked. The rule in both cases:
+**the underlying facts are free, the rendering is not.** Check the licence
+before proposing reuse, and expect the answer to be "rebuild it from the
+source data", which is better for the site anyway.
+
+### A field timeline with his own work marked on it
+
+From Fig. 1 of `~/research-papers/ai-driven-protein-design.pdf` (Koh et al.,
+*Nature Reviews Bioengineering* 2025, doi:10.1038/s44222-025-00349-8).
+**That figure is © Springer Nature Limited 2025, no Creative Commons
+licence**, so it cannot be reposted. Crossref lists only Springer's
+text-and-data-mining terms, which do not cover republication.
+
+The milestones themselves are historical facts and are free to use. The idea
+he liked: redraw the AI-era arc in the site's own style, cite the review as a
+source, and **plot his own projects on the same axis** (DiMA fine-tuning,
+CAFA 6, backbone validation). That turns field context into a statement about
+where he sits in it. Their figure has ~40 entries; a good one has 10 to 14, so
+cut the database history and keep the AI arc. Horizontal, scroll-driven, same
+restraint as the protein grid.
+
+### Space-filling renders instead of line traces
+
+He liked the protein images on beautifulchemistry.net, particularly a
+symmetric complex with yellow subunits and red cores, and wanted one to rotate
+on hover. **That site carries no licence statement at all** (checked the
+structures page, the about page, and /terms and /copyright which both 404), so
+default all rights reserved. Those renders are original creative work by Yan
+Liang at USTC. Also worth saying plainly: a static image cannot rotate, since
+the other side is not in the file.
+
+The coordinates are free though, and the data is already in this repo. His own
+`laproteina_001.pdb` carries **1,740 atoms including side chains**, while
+`assets/backbones.js` only ships the 200 alpha carbons. Drawing depth-sorted
+circles with radial gradients gives the rounded molecular-surface look in the
+same canvas 2D renderer, no library, and it rotates for real.
+
+Two routes: space-fill his own generated designs (no licence question, but a
+200-residue monomer is a compact blob rather than a symmetric flower), or
+render a real PDB entry with genuine symmetry such as a ferritin cage or a
+chaperonin. Full virus capsids are out; those run to millions of atoms.
