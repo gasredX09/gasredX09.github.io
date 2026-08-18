@@ -3,9 +3,12 @@
 // front and modulating stroke width and alpha by z, which is enough to read as
 // three-dimensional at this size.
 //
-// Scroll turns the whole grid. Dragging one structure spins that one on its
-// own and the offset sticks. touch-action on the canvas keeps vertical
-// scrolling with the page while horizontal drags rotate.
+// Each structure carries its own 3x3 orientation. Dragging rotates it about
+// the screen-space axis perpendicular to the drag, so it follows the pointer
+// whichever way you pull it; release with speed and it coasts about that same
+// axis under friction. A hard scroll over one tumbles it about the horizontal.
+// Scrolling the page turns the whole grid about the vertical on top of all of
+// that.
 
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.querySelector('.structure-canvas');
@@ -17,6 +20,41 @@ document.addEventListener('DOMContentLoaded', () => {
     // gets no empty box where the figure would be.
     canvas.closest('figure').hidden = false;
 
+    // ---- small 3x3 helpers, row-major -------------------------------------
+    const IDENT = () => [1, 0, 0, 0, 1, 0, 0, 0, 1];
+
+    // Rodrigues: rotation about a unit axis by theta
+    const axisAngle = ([x, y, z], t) => {
+        const c = Math.cos(t), s = Math.sin(t), k = 1 - c;
+        return [
+            k * x * x + c,     k * x * y - s * z, k * x * z + s * y,
+            k * x * y + s * z, k * y * y + c,     k * y * z - s * x,
+            k * x * z - s * y, k * y * z + s * x, k * z * z + c
+        ];
+    };
+
+    const mul = (a, b) => {
+        const o = new Array(9);
+        for (let r = 0; r < 3; r++) {
+            for (let c = 0; c < 3; c++) {
+                o[r * 3 + c] = a[r * 3] * b[c] + a[r * 3 + 1] * b[3 + c] + a[r * 3 + 2] * b[6 + c];
+            }
+        }
+        return o;
+    };
+
+    const apply = (m, x, y, z) => [
+        m[0] * x + m[1] * y + m[2] * z,
+        m[3] * x + m[4] * y + m[5] * z,
+        m[6] * x + m[7] * y + m[8] * z
+    ];
+
+    // Turn the structure about an axis given in screen space. Pre-multiplying
+    // is what makes the rotation feel attached to the pointer rather than to
+    // the structure's own drifting frame.
+    const turn = (i, axis, angle) => { rot[i] = mul(axisAngle(axis, angle), rot[i]); };
+
+    // ---- state -------------------------------------------------------------
     // The data file holds six La-Proteina samples then six ReQFlow. Take three
     // at random from each half so the caption stays true whatever comes up,
     // then shuffle the six so the generators are not in a predictable order.
@@ -29,13 +67,18 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const half = BACKBONES.length / 2;
     const pick = n => shuffle([...Array(half).keys()].map(i => i + n)).slice(0, 3);
-    const chosen = shuffle([...pick(0), ...pick(half)]);
-    const models = chosen.map(i => BACKBONES[i]);
+    const models = shuffle([...pick(0), ...pick(half)]).map(i => BACKBONES[i]);
     const SHOWN = models.length;
-    const spin = new Array(SHOWN).fill(0);      // per-structure drag offset
-    const vel = new Array(SHOWN).fill(0);       // rad/ms about Y, decays after a flick
-    const tiltOff = new Array(SHOWN).fill(0);   // extra X rotation from hard scrolls
-    const velX = new Array(SHOWN).fill(0);      // rad/ms about X
+
+    const rot = models.map(IDENT);                  // per-structure orientation
+    const axis = models.map(() => [0, 1, 0]);       // current spin axis
+    const speed = new Array(SHOWN).fill(0);         // rad/ms about that axis
+
+    const DRAG_K = 0.012;      // radians per pixel dragged
+    const MAX_V = 0.03;        // rad/ms cap, about five turns a second
+    const FRICTION = 0.9982;   // per ms; a hard flick coasts ~2.6 turns over ~3s
+    const STOP_V = 0.00008;    // below this it is not visibly moving
+    const HARD = 2.2;          // px/ms of wheel travel before a scroll counts
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     let w = 0, h = 0, cols = 3, cellW = 0, cellH = 0;
@@ -68,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return `rgb(${Math.round(r1 + (r2 - r1) * t)},${Math.round(g1 + (g2 - g1) * t)},${Math.round(b1 + (b2 - b1) * t)})`;
     };
 
+    // ---- drawing -----------------------------------------------------------
     const draw = base => {
         const col = palette();
         ctx.clearRect(0, 0, w, h);
@@ -75,24 +119,24 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
+        // shared page-scroll spin about the vertical, then a fixed viewing tilt
+        const view = mul(axisAngle([1, 0, 0], 0.42), axisAngle([0, 1, 0], base));
+
         models.forEach((pts, i) => {
+            const m = mul(view, rot[i]);
             const cx = cellW * ((i % cols) + 0.5);
             const cy = cellH * (Math.floor(i / cols) + 0.5);
-            const angle = base + spin[i];
-            const ca = Math.cos(angle), sa = Math.sin(angle);
-            const tilt = 0.42 + tiltOff[i], ct = Math.cos(tilt), st = Math.sin(tilt);
 
             const proj = pts.map(([x, y, z]) => {
-                const rx = x * ca + z * sa;
-                const rz = -x * sa + z * ca;
-                return [cx + rx * scale, cy + (y * ct - rz * st) * scale, y * st + rz * ct];
+                const [px, py, pz] = apply(m, x, y, z);
+                return [cx + px * scale, cy + py * scale, pz];
             });
 
             const segs = [];
             for (let k = 0; k < proj.length - 1; k++) {
                 segs.push({ k, z: (proj[k][2] + proj[k + 1][2]) / 2 });
             }
-            segs.sort((p, q) => p.z - q.z);
+            segs.sort((p, q) => p.z - q.z);       // back to front
 
             for (const { k, z } of segs) {
                 const d = (z + 100) / 200;                 // 0 far, 1 near
@@ -108,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.globalAlpha = 1;
     };
 
-    // Scroll drives the shared rotation. Geometry cached, rAF-throttled.
+    // ---- page scroll turns the whole grid ----------------------------------
     let top = 0, height = 1, ticking = false;
     const measure = () => {
         const r = canvas.getBoundingClientRect();
@@ -133,13 +177,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const refresh = () => { layout(); measure(); render(); };
 
-    // Drag one structure to spin it independently of the others. Release with
-    // some speed and it keeps turning, slowing under friction until it stops.
-    const MAX_V = 0.03;        // rad/ms cap, about five turns a second
-    const FRICTION = 0.9982;   // per ms; a hard flick coasts ~2.6 turns over ~3s
-    const STOP_V = 0.00008;    // below this it is not visibly moving
+    // ---- coasting ----------------------------------------------------------
+    let coasting = false;
+    const coast = () => {
+        if (coasting) return;
+        coasting = true;
+        let prev = performance.now();
+        const stepFrame = now => {
+            const dt = Math.min(64, now - prev);   // ignore huge tab-switch gaps
+            prev = now;
+            let moving = false;
+            for (let i = 0; i < SHOWN; i++) {
+                // A held structure keeps whatever velocity the drag is building
+                // up, otherwise releasing it mid-coast would throw nothing.
+                if (i === dragging) continue;
+                if (Math.abs(speed[i]) <= STOP_V) { speed[i] = 0; continue; }
+                turn(i, axis[i], speed[i] * dt);
+                speed[i] *= Math.pow(FRICTION, dt);
+                moving = true;
+            }
+            render();
+            if (moving) requestAnimationFrame(stepFrame);
+            else coasting = false;
+        };
+        requestAnimationFrame(stepFrame);
+    };
 
-    let dragging = -1, lastX = 0, lastT = 0;
+    // ---- pointer -----------------------------------------------------------
+    let dragging = -1, lastX = 0, lastY = 0, lastT = 0;
+
     const cellAt = e => {
         const r = canvas.getBoundingClientRect();
         const i = Math.floor((e.clientY - r.top) / cellH) * cols
@@ -150,21 +216,30 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.addEventListener('pointerdown', e => {
         dragging = cellAt(e);
         if (dragging < 0) return;
-        vel[dragging] = 0;            // grabbing a spinning one stops it
-        lastX = e.clientX;
-        lastT = e.timeStamp;
+        speed[dragging] = 0;          // grabbing a spinning one stops it
+        lastX = e.clientX; lastY = e.clientY; lastT = e.timeStamp;
         canvas.setPointerCapture(e.pointerId);
     });
 
     canvas.addEventListener('pointermove', e => {
         if (dragging < 0) return;
-        const dx = (e.clientX - lastX) * 0.012;
+        const dx = e.clientX - lastX, dy = e.clientY - lastY;
+        const len = Math.hypot(dx, dy);
+        lastX = e.clientX; lastY = e.clientY;
+        if (len < 0.01) return;
+
+        // Axis perpendicular to the drag, in screen space: pulling right turns
+        // it about the vertical, pulling down about the horizontal, and any
+        // diagonal about the matching in-between axis.
+        const ax = [-dy / len, dx / len, 0];
+        const angle = len * DRAG_K;
+        turn(dragging, ax, angle);
+
         const dt = Math.max(1, e.timeStamp - lastT);
-        spin[dragging] += dx;
-        // smooth so one jittery final event cannot dominate the throw
-        vel[dragging] = vel[dragging] * 0.7 + (dx / dt) * 0.3;
-        lastX = e.clientX;
         lastT = e.timeStamp;
+        axis[dragging] = ax;
+        // smooth so one jittery final event cannot dominate the throw
+        speed[dragging] = speed[dragging] * 0.7 + (angle / dt) * 0.3;
         schedule();
     });
 
@@ -173,52 +248,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const i = dragging;
         dragging = -1;
         if (canvas.hasPointerCapture(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
-        vel[i] = Math.max(-MAX_V, Math.min(MAX_V, vel[i]));
-        if (reduce.matches) vel[i] = 0;
-        if (Math.abs(vel[i]) > STOP_V) coast();
-    };
-
-    // Runs only while something is still turning, then stops itself.
-    let coasting = false;
-    const coast = () => {
-        if (coasting) return;
-        coasting = true;
-        let prev = performance.now();
-        const step = now => {
-            const dt = Math.min(64, now - prev);   // ignore huge tab-switch gaps
-            prev = now;
-            let moving = false;
-            for (let i = 0; i < SHOWN; i++) {
-                // A held structure keeps whatever velocity the drag is building
-                // up, otherwise releasing it mid-coast would throw nothing.
-                if (i !== dragging) {
-                    if (Math.abs(vel[i]) > STOP_V) {
-                        spin[i] += vel[i] * dt;
-                        vel[i] *= Math.pow(FRICTION, dt);
-                        moving = true;
-                    } else { vel[i] = 0; }
-                }
-                if (Math.abs(velX[i]) > STOP_V) {
-                    tiltOff[i] += velX[i] * dt;
-                    velX[i] *= Math.pow(FRICTION, dt);
-                    moving = true;
-                } else { velX[i] = 0; }
-            }
-            render();
-            if (moving) requestAnimationFrame(step);
-            else coasting = false;
-        };
-        requestAnimationFrame(step);
+        speed[i] = Math.max(-MAX_V, Math.min(MAX_V, speed[i]));
+        if (reduce.matches) speed[i] = 0;
+        if (Math.abs(speed[i]) > STOP_V) coast();
     };
     canvas.addEventListener('pointerup', endDrag);
     canvas.addEventListener('pointercancel', endDrag);
 
     // A hard scroll while the pointer is over a structure tumbles that one
-    // about X. Judged on speed rather than raw delta so a mouse wheel and a
-    // trackpad behave alike, and thresholded so ordinary scrolling past the
-    // figure leaves everything alone. Never calls preventDefault: the page
-    // must keep scrolling normally.
-    const HARD = 2.2;          // px/ms of wheel travel before it counts as hard
+    // about the horizontal. Judged on speed rather than raw delta so a mouse
+    // wheel and a trackpad behave alike, and thresholded so ordinary scrolling
+    // past the figure leaves everything alone. The listener is passive and
+    // never calls preventDefault, so the page keeps scrolling normally.
     let wheelT = 0;
     canvas.addEventListener('wheel', e => {
         if (reduce.matches) return;
@@ -226,9 +267,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (i < 0) return;
         const dt = Math.max(1, e.timeStamp - wheelT);
         wheelT = e.timeStamp;
-        const speed = e.deltaY / dt;
-        if (Math.abs(speed) < HARD) return;
-        velX[i] = Math.max(-MAX_V, Math.min(MAX_V, velX[i] + speed * 0.0016));
+        const sp = e.deltaY / dt;
+        if (Math.abs(sp) < HARD) return;
+        axis[i] = [-1, 0, 0];
+        speed[i] = Math.max(-MAX_V, Math.min(MAX_V, speed[i] + sp * 0.0016));
         coast();
     }, { passive: true });
 
