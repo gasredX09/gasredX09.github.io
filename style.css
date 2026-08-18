@@ -307,9 +307,8 @@ main {
 
 .hero-photo {
     flex: 0 0 auto;
-    width: 200px;
-    height: 200px;
-    border-radius: 6px;
+    width: 240px;
+    height: 240px;
     object-fit: cover;
 }
 
@@ -694,8 +693,8 @@ main {
     }
 
     .hero-photo {
-        width: 160px;
-        height: 160px;
+        width: 180px;
+        height: 180px;
     }
 
     .affil-name {
