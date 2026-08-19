@@ -126,6 +126,44 @@ These cost real time to rediscover:
   calls its render/update path directly at init. Verify scroll behaviour in a
   real browser; do not conclude from a headless screenshot that it is broken.
 
+## GitHub Pages caching, hit three times
+
+Pages serves every asset with `cache-control: max-age=600` and there is no way
+to change that. For ten minutes after a push a browser can hold the old CSS or
+JS while getting the new HTML. This has caused, in order:
+
+- the nav brand rendering at ~150px, because new HTML met a stylesheet cached
+  before `.brand-mark` existed and an inline SVG with no width or height
+  attributes falls back to its intrinsic size;
+- a corrected rotation axis looking like a no-op;
+- a halved animation speed looking unchanged.
+
+Two rules follow. **Give inline SVG explicit `width` and `height` attributes**,
+or better, use text, so a missing rule cannot blow out the layout. And when a
+change appears not to have taken effect, **check what the CDN is actually
+serving before assuming the code is wrong**:
+
+```bash
+curl -s "https://gasredx09.github.io/style.css?cb=$RANDOM" | grep -A3 'the-rule'
+curl -sI "https://gasredx09.github.io/style.css" | grep -iE 'age:|last-modified'
+```
+
+If the server has the new bytes, it is a stale browser cache and a hard reload
+fixes it. Version queries on asset URLs (`script.js?v=7`) would end this for
+good, at the cost of remembering to bump them; not currently used.
+
+## Pages builds can fail while reporting "building"
+
+A build sat in `building` for over an hour, then flipped to `errored` with only
+"Page build failed" and no detail. The same commit built fine when re-run, so
+it was transient on GitHub's side. Re-trigger without an empty commit:
+
+```bash
+gh api -X POST repos/gasredX09/gasredX09.github.io/pages/builds
+```
+
+Treat anything still `building` after a few minutes as suspect rather than slow.
+
 ## CSS gotcha, already hit once
 
 A `backdrop-filter` element nested inside another `backdrop-filter` element
