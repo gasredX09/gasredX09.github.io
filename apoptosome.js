@@ -93,20 +93,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const zs = new Float32Array(N);
     const px = new Float32Array(N), py = new Float32Array(N);
 
-    const draw = (ry, rx) => {
+    // Spin is about the particle's own C7 axis, which is z and runs
+    // perpendicular to the plane of the ring, so it turns like a wheel rather
+    // than tumbling edge-on. The viewing tilt is applied after, and only so
+    // the disc reads as three-dimensional instead of flat.
+    const draw = (spin, tilt) => {
         ctx.clearRect(0, 0, w, h);
-        const ca = Math.cos(ry), sa = Math.sin(ry);
-        const ct = Math.cos(rx), st = Math.sin(rx);
+        const cs = Math.cos(spin), sn = Math.sin(spin);
+        const ct = Math.cos(tilt), st = Math.sin(tilt);
         const cx = w / 2, cy = h / 2;
 
         for (let i = 0; i < N; i++) {
             const j = i * 4;
             const x = atoms[j], y = atoms[j + 1], z = atoms[j + 2];
-            const rxx = x * ca + z * sa;
-            const rz = -x * sa + z * ca;
-            px[i] = cx + rxx * scale;
-            py[i] = cy + (y * ct - rz * st) * scale;
-            zs[i] = y * st + rz * ct;
+            const sx = x * cs - y * sn;          // about the symmetry axis
+            const sy = x * sn + y * cs;
+            px[i] = cx + sx * scale;
+            py[i] = cy + (sy * ct - z * st) * scale;
+            zs[i] = sy * st + z * ct;            // depth after the tilt
             order[i] = i;
         }
         // back to front
