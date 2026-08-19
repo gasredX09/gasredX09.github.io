@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---- motion ------------------------------------------------------------
     const TILT = 0.30;
     let angle = 0, spinning = false, raf = 0, prev = 0;
-    const SPEED = 0.00035;                // rad/ms, a slow turn
+    const SPEED = 0.0002;                 // rad/ms, an ambient drift
 
     const frame = now => {
         angle += (now - prev) * SPEED;
