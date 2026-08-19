@@ -21,18 +21,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---- build the full particle from the asymmetric unit -------------------
     const build = () => {
         const out = [];
-        const add = (flat, kind) => {
+        // Each Apaf-1 copy is tagged with its own index so the seven spokes can
+        // be coloured apart. Seven identical spokes make the spin almost
+        // impossible to see, since the particle is identical every 51.4 degrees.
+        const add = (flat, kindOf) => {
             for (let c = 0; c < APOPTOSOME.n; c++) {
                 const t = (2 * Math.PI * c) / APOPTOSOME.n;
                 const cs = Math.cos(t), sn = Math.sin(t);
+                const kind = kindOf(c);
                 for (let i = 0; i < flat.length; i += 3) {
                     const x = flat[i], y = flat[i + 1], z = flat[i + 2];
                     out.push(x * cs - y * sn, x * sn + y * cs, z, kind);
                 }
             }
         };
-        add(APOPTOSOME.apaf, 0);
-        add(APOPTOSOME.cytc, 1);
+        add(APOPTOSOME.apaf, c => c);              // 0..6, one per spoke
+        add(APOPTOSOME.cytc, () => APOPTOSOME.n);  // 7, all cytochrome c
         return out;                       // flat [x, y, z, kind] * N
     };
     const atoms = build();
@@ -42,19 +46,50 @@ document.addEventListener('DOMContentLoaded', () => {
     const STEPS = 10;                     // brightness bands, cheap depth cue
     let sprites = [], spriteR = 0;
 
+    // Seven spoke colours swept through hue between two palette endpoints,
+    // plus one constant colour for cytochrome c so it still reads as a
+    // separate protein rather than an eighth spoke.
+    const hexToHsl = hex => {
+        const [r, g, b] = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255);
+        const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn;
+        const l = (mx + mn) / 2;
+        if (!d) return [0, 0, l];
+        const s = d / (1 - Math.abs(2 * l - 1));
+        const h = mx === r ? ((g - b) / d + (g < b ? 6 : 0))
+                : mx === g ? (b - r) / d + 2
+                : (r - g) / d + 4;
+        return [h * 60, s, l];
+    };
+
+    const hslToRgb = (h, s, l) => {
+        h = ((h % 360) + 360) % 360;
+        const c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs((h / 60) % 2 - 1));
+        const m = l - c / 2;
+        const [r, g, b] = h < 60 ? [c, x, 0] : h < 120 ? [x, c, 0] : h < 180 ? [0, c, x]
+                        : h < 240 ? [0, x, c] : h < 300 ? [x, 0, c] : [c, 0, x];
+        return [r + m, g + m, b + m].map(v => Math.round(v * 255));
+    };
+
     const colours = () => {
-        const s = getComputedStyle(document.documentElement);
-        return [
-            s.getPropertyValue('--apo-ring').trim() || '#8b8ef5',
-            s.getPropertyValue('--apo-core').trim() || '#f0913f'
-        ];
+        const st = getComputedStyle(document.documentElement);
+        const a = hexToHsl(st.getPropertyValue('--apo-ring').trim() || '#8b8ef5');
+        const b = hexToHsl(st.getPropertyValue('--apo-ring-end').trim() || '#f472b6');
+        const out = [];
+        for (let i = 0; i < APOPTOSOME.n; i++) {
+            const t = i / (APOPTOSOME.n - 1);
+            out.push(hslToRgb(a[0] + (b[0] - a[0]) * t,
+                              a[1] + (b[1] - a[1]) * t,
+                              a[2] + (b[2] - a[2]) * t));
+        }
+        const core = st.getPropertyValue('--apo-core').trim() || '#f0913f';
+        out.push([1, 3, 5].map(i => parseInt(core.slice(i, i + 2), 16)));
+        return out;
     };
 
     const buildSprites = r => {
         spriteR = r;
         const size = Math.ceil(r * 2) + 2;
-        sprites = colours().map(hex => {
-            const rgb = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+        sprites = colours().map(rgb => {
             return Array.from({ length: STEPS }, (_, s) => {
                 const k = 0.42 + 0.58 * (s / (STEPS - 1));      // far to near
                 const c = document.createElement('canvas');
