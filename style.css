@@ -367,31 +367,10 @@ main {
     color: var(--text-primary);
 }
 
-/* Apoptosome figure */
-.apo-section {
-    padding-top: 1rem;
-    padding-bottom: 2rem;
-}
-
-.apo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
+/* Apoptosome canvas. Only 404.html uses it now, and it sizes the canvas
+   itself, so nothing is set here beyond the basics. */
 .apoptosome-canvas {
     display: block;
-    width: 340px;
-    height: 340px;
-    max-width: 100%;
-    cursor: grab;
-}
-
-@media (max-width: 480px) {
-    .apoptosome-canvas {
-        width: 260px;
-        height: 260px;
-    }
 }
 
 /* Generated backbone figure */
