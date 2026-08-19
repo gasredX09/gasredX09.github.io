@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---- motion ------------------------------------------------------------
     const TILT = 0.30;
     let angle = 0, spinning = false, raf = 0, prev = 0;
-    const SPEED = 0.0007;                 // rad/ms, a slow turn
+    const SPEED = 0.00035;                // rad/ms, a slow turn
 
     const frame = now => {
         angle += (now - prev) * SPEED;
