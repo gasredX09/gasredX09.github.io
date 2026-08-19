@@ -17,6 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.closest('figure').hidden = false;
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    // Config from the markup, so one renderer serves both the captioned figure
+    // and the oversized decorative one on the 404 page.
+    const ALWAYS = canvas.dataset.spin === 'always';
+    const FILL = parseFloat(canvas.dataset.fill) || 0.46;
 
     // ---- build the full particle from the asymmetric unit -------------------
     const build = () => {
@@ -119,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.width = Math.round(w * dpr);
         canvas.height = Math.round(h * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        scale = Math.min(w, h) * 0.46 / 100;
+        scale = Math.min(w, h) * FILL / 100;
         buildSprites(Math.max(1.8, scale * 3.4));
     };
 
@@ -180,10 +184,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const stop = () => { spinning = false; cancelAnimationFrame(raf); };
 
-    canvas.addEventListener('pointerenter', start);
-    canvas.addEventListener('pointerleave', stop);
-    canvas.addEventListener('focus', start);
-    canvas.addEventListener('blur', stop);
+    if (ALWAYS) {
+        // Only run while the canvas is actually on screen.
+        new IntersectionObserver(es => es[0].isIntersecting ? start() : stop())
+            .observe(canvas);
+    } else {
+        canvas.addEventListener('pointerenter', start);
+        canvas.addEventListener('pointerleave', stop);
+        canvas.addEventListener('focus', start);
+        canvas.addEventListener('blur', stop);
+    }
 
     const refresh = () => { layout(); draw(angle, TILT); };
     refresh();

@@ -35,6 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-links a');
     const sections = document.querySelectorAll('main section[id]');
 
+    // 404.html carries the theme toggle but no menu, so everything below is
+    // optional. Bail here rather than throwing and killing the rest.
+    if (!navToggle || !navList) return;
+
     // 1. Mobile menu
     const closeMenu = () => {
         navList.classList.remove('open');
