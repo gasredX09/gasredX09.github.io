@@ -57,9 +57,9 @@
     --protein-n: #2563eb;
     --protein-c: #7c3aed;
 
-    --apo-ring: #3b82f6;
-    --apo-ring-end: #db2777;
-    --apo-core: #d97706;
+    --apo-ring: #1d4ed8;
+    --apo-ring-end: #be185d;
+    --apo-core: #b45309;
     }
 }
 
@@ -82,9 +82,9 @@
     --protein-n: #2563eb;
     --protein-c: #7c3aed;
 
-    --apo-ring: #3b82f6;
-    --apo-ring-end: #db2777;
-    --apo-core: #d97706;
+    --apo-ring: #1d4ed8;
+    --apo-ring-end: #be185d;
+    --apo-core: #b45309;
 }
 
 
@@ -764,20 +764,22 @@ main {
     /* Oversized and pushed past the corner so the viewport does the cropping.
        The molecule stays inside its canvas (data-fill under 0.5), otherwise the
        canvas edge shows up as a straight cut through the spokes. */
-    right: -30vmin;
-    bottom: -34vmin;
+    right: -42vmin;
+    bottom: -40vmin;
     width: 105vmin;
     height: 105vmin;
     pointer-events: none;
     opacity: 0.5;
 }
 
-/* Reads much stronger against white, so pull it back there. */
+/* Lowering opacity on white blends toward white, which desaturates; on black
+   it blends toward black and keeps its identity. So light mode needs a higher
+   opacity and deeper base hues, not a lower one. */
 @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) .nf-art { opacity: 0.32; }
+    :root:not([data-theme="dark"]) .nf-art { opacity: 0.58; }
 }
 
-:root[data-theme="light"] .nf-art { opacity: 0.32; }
+:root[data-theme="light"] .nf-art { opacity: 0.58; }
 
 .nf-art .apoptosome-canvas {
     width: 100%;
@@ -815,9 +817,12 @@ main {
 }
 
 @media (max-width: 640px) {
+    /* The copy runs full width here and the molecule sits below it, so there is
+       nothing to clear. Opacity is deliberately not touched: the theme rules
+       below carry more specificity and would win anyway, which made the old
+       override apply in dark mode only. */
     .nf-art {
-        right: -38vmin;
-        bottom: -38vmin;
-        opacity: 0.34;
+        right: -34vmin;
+        bottom: -30vmin;
     }
 }
