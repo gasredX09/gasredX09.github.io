@@ -1,9 +1,5 @@
 # AGENTS.md
 
-Read `CLAUDE.md` in this directory before working in this repository. It
-contains additional project context and instructions. Everything there applies
-alongside this file.
-
 Personal site for Aryan Sharan Guda. Plain static HTML, CSS, and JS. No build
 step, no dependencies, no framework, no package.json. Edit the files directly.
 

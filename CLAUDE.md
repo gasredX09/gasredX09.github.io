@@ -1,7 +1,12 @@
 # CLAUDE.md
 
-This file supplements the repository rules in `AGENTS.md`. `AGENTS.md` directs
-agents here, so do not reread `AGENTS.md` when following that instruction.
+Read `AGENTS.md` in this directory first. It holds the project rules,
+conventions, verification checklist, and the environment gotchas. Everything
+there applies. This file only adds what is specific to Claude Code.
+
+`AGENTS.md` deliberately does not point back here, so the two cannot send an
+agent in a loop. Other tools read `AGENTS.md` on their own and get the rules
+without this file.
 
 ## Notes specific to Claude Code
 
